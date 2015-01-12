@@ -7,9 +7,16 @@
 //
 
 import UIKit
+import CoreData
 
-class RestaurantTableViewController: UITableViewController {
+class RestaurantTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchResultsUpdating {
     var restaurants:[Restaurant] = []
+    
+    var fetchResultController:NSFetchedResultsController!
+    
+    var searchController: UISearchController!
+    
+    var searchResults: [Restaurant] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +28,33 @@ class RestaurantTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 80.0;
         self.tableView.rowHeight = UITableViewAutomaticDimension;
         
+        var fetchRequest = NSFetchRequest(entityName: "Restaurant")
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        if let managedObjectContext = (UIApplication.sharedApplication().delegate as
+            AppDelegate).managedObjectContext {
+            fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest,
+            managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+            fetchResultController.delegate = self
+            
+            var e: NSError?
+            var result = fetchResultController.performFetch(&e)
+            restaurants = fetchResultController.fetchedObjects as [Restaurant]
+            
+            if result != true {
+            println(e?.localizedDescription)
+            }
+        }
+        
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.sizeToFit()
+        tableView.tableHeaderView = searchController.searchBar
+        
+        definesPresentationContext = true
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,7 +73,11 @@ class RestaurantTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
+        if searchController.active {
+         return searchResults.count
+        } else {
         return self.restaurants.count
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -48,7 +86,7 @@ class RestaurantTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as CustomTableViewCell
         
         // Configure the cell...
-        let restaurant = restaurants[indexPath.row]
+        let restaurant = (searchController.active) ? searchResults[indexPath.row] : restaurants[indexPath.row]
         cell.nameLabel.text = restaurant.name
         cell.thumbnailImageView.image = UIImage(data: restaurant.image)
         cell.locationLabel.text = restaurant.location
@@ -62,12 +100,21 @@ class RestaurantTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if searchController.active {
+            return false
+        } else {
+            return true
+        }
+    }
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         
     }
 
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+    
         var shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Share", handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
             let shareMenu = UIAlertController(title: nil, message: "Share using", preferredStyle: .ActionSheet)
@@ -84,14 +131,22 @@ class RestaurantTableViewController: UITableViewController {
             self.presentViewController(shareMenu, animated: true, completion: nil)
             }
         )
-        
+    
         var deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Delete",handler: {
             (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
             // Delete the row from the data source
-            self.restaurants.removeAtIndex(indexPath.row)
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-
+                if let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext {
+                
+                let restaurantToDelete = self.fetchResultController.objectAtIndexPath(indexPath) as Restaurant
+                managedObjectContext.deleteObject(restaurantToDelete)
+                
+                var e: NSError?
+                if managedObjectContext.save(&e) != true {
+                println("delete error:  + \(e!.localizedDescription)")
+                }
+                
+                }
             }
         )
 
@@ -109,7 +164,7 @@ class RestaurantTableViewController: UITableViewController {
         if segue.identifier == "showRestaurantDetail" {
             if let row = tableView.indexPathForSelectedRow()?.row {
                 let destinationController = segue.destinationViewController as DetailViewController
-                destinationController.restaurant = restaurants[row]
+                destinationController.restaurant = (searchController.active) ? searchResults[row] : restaurants[row]
             }
         }
     }
@@ -117,6 +172,51 @@ class RestaurantTableViewController: UITableViewController {
 
     @IBAction func unwindToHomeScreen(segue:UIStoryboardSegue) {
 
+    }
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController!) {
+            tableView.beginUpdates()
+    }
+    func controller(controller: NSFetchedResultsController!, didChangeObject anObject: AnyObject!,
+            atIndexPath indexPath: NSIndexPath!, forChangeType type: NSFetchedResultsChangeType,
+            newIndexPath: NSIndexPath!) {
+        switch type {
+        case .Insert:
+            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
+        case .Delete:
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        case .Update:
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        default:
+            tableView.reloadData()
+            }
+        restaurants = controller.fetchedObjects as [Restaurant]
+    }
+    func controllerDidChangeContent(controller: NSFetchedResultsController!) {
+            tableView.endUpdates()
+    }
+    
+    func filterContentForSearchText(searchText: String) {
+        searchResults = restaurants.filter({ (restaurant: Restaurant) -> Bool in
+            let nameMatch = restaurant.name.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
+            
+            return nameMatch != nil
+        })
+        
+        searchResults += restaurants.filter({ (restaurant: Restaurant) -> Bool in
+            let locationMatch = restaurant.location.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
+            
+            return locationMatch != nil
+        })
+
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        let searchText = searchController.searchBar.text
+        
+        filterContentForSearchText(searchText)
+        
+        tableView.reloadData()
     }
 
 }

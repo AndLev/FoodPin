@@ -100,14 +100,14 @@ class AddTableViewController: UITableViewController, UIImagePickerControllerDele
         if let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext {
             restaurant = NSEntityDescription.insertNewObjectForEntityForName("Restaurant", inManagedObjectContext: managedObjectContext) as Restaurant
             restaurant.name = nameTextField.text
-            restaurant.type = typeTextField
-            restaurant.location = locationTextField
+            restaurant.type = typeTextField.text
+            restaurant.location = locationTextField.text
             restaurant.image = UIImagePNGRepresentation(imageView.image)
             restaurant.isVisited = isVisited
             
             var e: NSError?
-            if managedObjectContext.save(&e) = true {
-                println("insert error: \(e!.localizedDescription)")
+            if managedObjectContext.save(&e) != true {
+                println("Insert error: \(e!.localizedDescription)")
                 return
             }
         }
