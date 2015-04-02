@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>91DEDB39-2B0A-4627-A74C-A6B3A3126863</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FoodPin</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>07CCFF4AC3A413BE74DEC616A90AA5B6840632ED</key>
+		<string>https://github.com/AndLev/FoodPin.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FoodPin.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>07CCFF4AC3A413BE74DEC616A90AA5B6840632ED</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/AndLev/FoodPin.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>07CCFF4AC3A413BE74DEC616A90AA5B6840632ED</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>07CCFF4AC3A413BE74DEC616A90AA5B6840632ED</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FoodPin</string>
+		</dict>
+	</array>
+</dict>
+</plist>

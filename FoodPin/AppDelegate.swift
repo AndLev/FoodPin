@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication!, didFinishLaunchingWithOptions launchOptions: NSDictionary!) -> Bool {
         
         // Change navigation bar appearance
-        UINavigationBar.appearance().barTintColor = UIColor(red: 231.0/255.0, green: 95.0/255.0, blue: 53.0/255.0, alpha: 0.3)
+        UINavigationBar.appearance().barTintColor = UIColor(red: 255.0/255.0, green: 87.0/255.0, blue: 34.0/255.0, alpha: 0.9)
         
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         
@@ -31,7 +31,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Change toolbar style
     //    UIBarButtonItem.appearance().tintColor = UIColor(red: 235.0/255.0, green: 73.0/255.0, blue: 27.0/255.0, alpha: 1.0)
-        UIToolbar.appearance().barTintColor = UIColor(red: 237.0/255.0, green: 240.0/255.0, blue: 243.0/255.0, alpha: 0.5)
+        UIToolbar.appearance().barTintColor = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 188.0/255.0, alpha: 0.9)
+        
+        UITabBar.appearance().tintColor = UIColor(red: 255.0/255.0, green: 87.0/255.0, blue: 34.0/255.0, alpha: 0.9)
+        
+        UITabBar.appearance().barTintColor = UIColor(red: 33.0/255.0, green: 33.0/255.0, blue: 33.0/255.0, alpha: 0.9)
         
         return true
     }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		490065481A63EE7000AC0757 /* FoodPin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 490065461A63EE7000AC0757 /* FoodPin.xcdatamodeld */; };
+		49F081071A65A0190046F958 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F081061A65A0190046F958 /* AboutViewController.swift */; };
+		49F081091A65A0590046F958 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F081081A65A0590046F958 /* WebViewController.swift */; };
 		F4444CA319989F2800977F20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4444CA219989F2800977F20 /* AppDelegate.swift */; };
 		F4444CA819989F2800977F20 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4444CA619989F2800977F20 /* Main.storyboard */; };
 		F4444CAA19989F2900977F20 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4444CA919989F2900977F20 /* Images.xcassets */; };
@@ -36,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		490065471A63EE7000AC0757 /* FoodPin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FoodPin.xcdatamodel; sourceTree = "<group>"; };
+		49F081061A65A0190046F958 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		49F081081A65A0590046F958 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		F4444C9D19989F2800977F20 /* FoodPin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodPin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4444CA119989F2800977F20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4444CA219989F2800977F20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +103,8 @@
 			isa = PBXGroup;
 			children = (
 				F4444CA219989F2800977F20 /* AppDelegate.swift */,
+				49F081061A65A0190046F958 /* AboutViewController.swift */,
+				49F081081A65A0590046F958 /* WebViewController.swift */,
 				F4444CBF1998A2DE00977F20 /* RestaurantTableViewController.swift */,
 				F4444CA619989F2800977F20 /* Main.storyboard */,
 				F4444CA919989F2900977F20 /* Images.xcassets */,
@@ -250,10 +256,12 @@
 				F4567CBA19AAD2DD003E5658 /* ReviewViewController.swift in Sources */,
 				F47FC97219A345FF002C4FFA /* Restaurant.swift in Sources */,
 				F4DF69A619B477F100566C15 /* MapViewController.swift in Sources */,
+				49F081071A65A0190046F958 /* AboutViewController.swift in Sources */,
 				F4444CA319989F2800977F20 /* AppDelegate.swift in Sources */,
 				F47FC97019A33FBD002C4FFA /* DetailTableViewCell.swift in Sources */,
 				F48B8D6619AB376700FB4C83 /* ShareViewController.swift in Sources */,
 				F47FC96A19A1AB03002C4FFA /* DetailViewController.swift in Sources */,
+				49F081091A65A0590046F958 /* WebViewController.swift in Sources */,
 				F4DF69A819B6A22100566C15 /* AddTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

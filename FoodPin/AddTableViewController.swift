@@ -121,12 +121,12 @@ class AddTableViewController: UITableViewController, UIImagePickerControllerDele
         let buttonClicked = sender as UIButton
         if buttonClicked == yesButton {
             isVisited = true
-            yesButton.backgroundColor = UIColor(red: 235.0/255.0, green: 73.0/255.0, blue: 27.0/255.0, alpha: 1.0)
+            yesButton.backgroundColor = UIColor(red: 230.0/255.0, green: 74.0/255.0, blue: 25.0/255.0, alpha: 1.0)
             noButton.backgroundColor = UIColor.grayColor()
         } else if buttonClicked == noButton {
             isVisited = false
             yesButton.backgroundColor = UIColor.grayColor()
-            noButton.backgroundColor = UIColor(red: 235.0/255.0, green: 73.0/255.0, blue: 27.0/255.0, alpha: 1.0)
+            noButton.backgroundColor = UIColor(red: 230.0/255.0, green: 74.0/255.0, blue: 25.0/255.0, alpha: 1.0)
         }
     }
 
