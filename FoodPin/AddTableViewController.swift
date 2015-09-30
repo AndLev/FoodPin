@@ -64,7 +64,8 @@ class AddTableViewController: UITableViewController, UIImagePickerControllerDele
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
-    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        
         imageView.image = image
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.clipsToBounds = true
@@ -97,17 +98,18 @@ class AddTableViewController: UITableViewController, UIImagePickerControllerDele
         }
 
         // If all fields are correctly filled in, extract the field value
-        if let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext {
-            restaurant = NSEntityDescription.insertNewObjectForEntityForName("Restaurant", inManagedObjectContext: managedObjectContext) as Restaurant
+        if let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext {
+            restaurant = NSEntityDescription.insertNewObjectForEntityForName("Restaurant", inManagedObjectContext: managedObjectContext) as! Restaurant
             restaurant.name = nameTextField.text
             restaurant.type = typeTextField.text
             restaurant.location = locationTextField.text
-            restaurant.image = UIImagePNGRepresentation(imageView.image)
+            restaurant.image = UIImagePNGRepresentation(imageView.image!)
             restaurant.isVisited = isVisited
             
-            var e: NSError?
-            if managedObjectContext.save(&e) != true {
-                println("Insert error: \(e!.localizedDescription)")
+            do {
+                try managedObjectContext.save()
+            } catch {
+                print("Insert error: \(error)")
                 return
             }
         }
@@ -118,7 +120,7 @@ class AddTableViewController: UITableViewController, UIImagePickerControllerDele
     
     @IBAction func updateIsVisited(sender: AnyObject) {
         // Yes button clicked
-        let buttonClicked = sender as UIButton
+        let buttonClicked = sender as! UIButton
         if buttonClicked == yesButton {
             isVisited = true
             yesButton.backgroundColor = UIColor(red: 230.0/255.0, green: 74.0/255.0, blue: 25.0/255.0, alpha: 1.0)
@@ -141,7 +143,7 @@ class AddTableViewController: UITableViewController, UIImagePickerControllerDele
     }
     */
 
-    func navigationController(navigationController: UINavigationController!, willShowViewController viewController: UIViewController!, animated: Bool) {
+    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: false)
     }
 }

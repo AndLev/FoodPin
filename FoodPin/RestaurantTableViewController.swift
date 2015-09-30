@@ -28,22 +28,21 @@ class RestaurantTableViewController: UITableViewController, NSFetchedResultsCont
         self.tableView.estimatedRowHeight = 80.0;
         self.tableView.rowHeight = UITableViewAutomaticDimension;
         
-        var fetchRequest = NSFetchRequest(entityName: "Restaurant")
+        let fetchRequest = NSFetchRequest(entityName: "Restaurant")
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        if let managedObjectContext = (UIApplication.sharedApplication().delegate as
+        if let managedObjectContext = (UIApplication.sharedApplication().delegate as!
             AppDelegate).managedObjectContext {
             fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
             fetchResultController.delegate = self
             
-            var e: NSError?
-            var result = fetchResultController.performFetch(&e)
-            restaurants = fetchResultController.fetchedObjects as [Restaurant]
-            
-            if result != true {
-            println(e?.localizedDescription)
+            do {
+                _ = try fetchResultController.performFetch()
+                restaurants = fetchResultController.fetchedObjects as! [Restaurant]
+            } catch {
+                print("Error: \(error)")
             }
         }
         
@@ -82,8 +81,8 @@ class RestaurantTableViewController: UITableViewController, NSFetchedResultsCont
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cellIdentifier = "Cell"
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as CustomTableViewCell
+        let cellIdentifier = "MainTableViewCell"
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CustomTableViewCell
         
         // Configure the cell...
         let restaurant = (searchController.active) ? searchResults[indexPath.row] : restaurants[indexPath.row]
@@ -113,9 +112,9 @@ class RestaurantTableViewController: UITableViewController, NSFetchedResultsCont
         
     }
 
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
     
-        var shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Share", handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+        let shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Share", handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
             let shareMenu = UIAlertController(title: nil, message: "Share using", preferredStyle: .ActionSheet)
             let twitterAction = UIAlertAction(title: "Twitter", style: UIAlertActionStyle.Default, handler: nil)
@@ -132,20 +131,20 @@ class RestaurantTableViewController: UITableViewController, NSFetchedResultsCont
             }
         )
     
-        var deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Delete",handler: {
+        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Delete",handler: {
             (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
             // Delete the row from the data source
-                if let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext {
+                if let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext {
                 
-                let restaurantToDelete = self.fetchResultController.objectAtIndexPath(indexPath) as Restaurant
+                let restaurantToDelete = self.fetchResultController.objectAtIndexPath(indexPath) as! Restaurant
                 managedObjectContext.deleteObject(restaurantToDelete)
                 
-                var e: NSError?
-                if managedObjectContext.save(&e) != true {
-                println("delete error:  + \(e!.localizedDescription)")
+                do {
+                    try managedObjectContext.save()
+                } catch {
+                        print("delete error:\(error)")
                 }
-                
                 }
             }
         )
@@ -162,8 +161,8 @@ class RestaurantTableViewController: UITableViewController, NSFetchedResultsCont
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showRestaurantDetail" {
-            if let row = tableView.indexPathForSelectedRow()?.row {
-                let destinationController = segue.destinationViewController as DetailViewController
+            if let row = tableView.indexPathForSelectedRow?.row {
+                let destinationController = segue.destinationViewController as! DetailViewController
                 destinationController.restaurant = (searchController.active) ? searchResults[row] : restaurants[row]
             }
         }
@@ -174,25 +173,24 @@ class RestaurantTableViewController: UITableViewController, NSFetchedResultsCont
 
     }
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController!) {
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
             tableView.beginUpdates()
     }
-    func controller(controller: NSFetchedResultsController!, didChangeObject anObject: AnyObject!,
-            atIndexPath indexPath: NSIndexPath!, forChangeType type: NSFetchedResultsChangeType,
-            newIndexPath: NSIndexPath!) {
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
         case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
         case .Update:
-            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
         default:
             tableView.reloadData()
             }
-        restaurants = controller.fetchedObjects as [Restaurant]
+        restaurants = controller.fetchedObjects as! [Restaurant]
     }
-    func controllerDidChangeContent(controller: NSFetchedResultsController!) {
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
             tableView.endUpdates()
     }
     
@@ -214,7 +212,7 @@ class RestaurantTableViewController: UITableViewController, NSFetchedResultsCont
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchText = searchController.searchBar.text
         
-        filterContentForSearchText(searchText)
+        filterContentForSearchText(searchText!)
         
         tableView.reloadData()
     }

@@ -54,7 +54,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as DetailTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("DetailViewCell", forIndexPath: indexPath) as! DetailTableViewCell
         
         cell.backgroundColor = UIColor.clearColor()
         
@@ -95,7 +95,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "showMap" {
-            let destinationController = segue.destinationViewController as MapViewController
+            let destinationController = segue.destinationViewController as! MapViewController
             destinationController.restaurant = restaurant
         }
 

@@ -24,7 +24,7 @@ class AboutViewController: UIViewController, MFMailComposeViewControllerDelegate
     
     @IBAction func sendEmail (sender: AnyObject) {
         if MFMailComposeViewController.canSendMail() {
-            var composer = MFMailComposeViewController()
+            let composer = MFMailComposeViewController()
             
             composer.mailComposeDelegate = self
             //composer.setToRecipients(["support@appcoda.com"])
@@ -38,19 +38,19 @@ class AboutViewController: UIViewController, MFMailComposeViewControllerDelegate
             }
         }
     
-    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result:MFMailComposeResult, error: NSError!) {
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error: NSError?) {
         
-        switch result.value {
-        case MFMailComposeResultCancelled.value:
-            println("Mail cancelled")
+        switch result.rawValue {
+        case MFMailComposeResultCancelled.rawValue:
+            print("Mail cancelled")
             
-        case MFMailComposeResultSaved.value:
-            println("Mail saved")
+        case MFMailComposeResultSaved.rawValue:
+            print("Mail saved")
             
-        case MFMailComposeResultSent.value:
-            println("Mail sent")
-        case MFMailComposeResultFailed.value:
-            println("Failed to send email: \(error.localizedDescription)")
+        case MFMailComposeResultSent.rawValue:
+            print("Mail sent")
+        case MFMailComposeResultFailed.rawValue:
+            print("Failed to send email: \(error!.localizedDescription)")
         default:
             break
         }

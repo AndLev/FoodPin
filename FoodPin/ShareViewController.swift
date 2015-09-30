@@ -20,8 +20,8 @@ class ShareViewController: UIViewController {
         super.viewDidLoad()
 
         // Apply blurring effect
-        var blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
-        var blurEffectView = UIVisualEffectView(effect: blurEffect)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         backgroundImageView.addSubview(blurEffectView)
         
@@ -50,14 +50,14 @@ class ShareViewController: UIViewController {
         emailButton.hidden = false
         messageButton.hidden = false
         
-        UIView.animateWithDuration(0.8, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: nil, animations: {
+        UIView.animateWithDuration(0.8, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
             
             self.facebookButton.transform = translate
             self.emailButton.transform = translate
             
             }, completion: nil)
         
-        UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: nil, animations: {
+        UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
             
             self.twitterButton.transform = translate
             self.messageButton.transform = translate
